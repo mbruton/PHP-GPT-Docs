@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="chat()" id="chat">
+
+    <p>
+        Used for text based tasks, text completion, code completion, deep application
+        integration, image analysis and chatbots.
+    </p>
+    <p>
+        One of the most useful tools available to us, and one worth taking the time to understand.
+    </p>
+    <p>
+        It's called chat because the Open AI interface is chat based, we talk to an AI assistant.
+    </p>
+    <p>
+        Constructing chat requests using the API is complex, PHP-GPT makes using this service
+        as simple as it could be.
+    </p>
+    <chapter id="chat-basic-usage" title="Basic usage">
+        <p>
+            In the most simple use case, we ask a question or give an instruction.
+        </p>
+        <code-block lang="php">
+            $story = (string) AI::chat('Write a story about a cute fluffy kitten.');
+        </code-block>
+        <p>
+            If we want to control the output more, we can set a system prompt using the
+            <code>systemMessage()</code> option on the builder.
+        </p>
+        <code-block lang="php">
+            $story = (string) AI::chat('Write a story about a cute fluffy kitten.')
+                ->systemPrompt('Output everything in French.');
+        </code-block>
+        <p>
+            Alternatively we can construct the builder without an initial instruction and
+            provide it instead via the <code>userMessage()</code> option.
+        </p>
+        <code-block lang="php">
+            $story = (string) AI::chat()
+                ->userMessage('Write a story about a cute fluffy kitten.')
+                ->systemPrompt('Output everything in French.');
+        </code-block>
+    </chapter>
+    <chapter id="chat-builder" title="Builder">
+        <chapter id="chat-builder-user-message" title="userMessage()">
+            <p>
+                Used to supply a new message from the user.  In most cases, the user is the
+                application making the request to AI, so we can think of this as the application
+                instructing AI to do something.
+            </p>
+            <p>
+                In the case of a chatbot, this would represent the current message from the user.
+            </p>
+            <p>
+                User message can be set directly when it is constructed, or via the <code>userMessage()</code>
+                option later.
+            </p>
+            <code-block lang="php">
+                // At construction
+                $builder = AI::chat('This is the user message.');
+
+                // Post construction
+                $builder = AI::chat();
+                $builder->userMessage('This is the user message.');
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-system-message" title="systemMessage()">
+            <p>
+                Used to instruct the AI on how it should behave.
+            </p>
+            <p>
+                For example, if we want the AI to answer in riddles then we can use
+                the system message to instruct it to do so.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Who was the first man on the moon?')
+                    ->systemMessage('Answer only in riddles.');
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-model" title="model()">
+            <p>
+                Used to set the AI model used to process the request. The default is
+                <code>gpt-4</code>.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Who was the first man on the moon?')
+                    ->model('gpt-4-1106-preview');
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-message-history" title="messageHistory()">
+            <p>
+                Used to supply message history for context, for example, if you are building
+                a chatbot, you want the AI to be able to see all the previous messages so the user
+                is able to ask followup questions.
+            </p>
+            <p>
+                The response object from the previous request will contain the message history
+                which will allow us to use for the next request.
+            </p>
+            <code-block lang="php">
+                // Ask the first question and get the response.
+                $response = AI::chat('Who was the first man on the moon?')
+                    ->execute();
+
+                // Print out the response
+                echo $response . "\n";
+
+                // Get the message history from the response
+                $history = $response->getMessageHistory();
+
+                // Ask a followup question with the message history
+                $response = AI::chat('What was the date?')
+                    ->messageHistory($history)
+                    ->execute();
+            </code-block>
+            <p>
+                If we want to construct the history manually, we can supply an array of messages
+                in the same structure as the Open AI API.
+            </p>
+        </chapter>
+        <chapter id="chat-builder-image" title="image()">
+            <p>
+                Used to analyse an image. This feature is currently only supported by the
+                <code>gpt-4-vision-preview</code> model so be sure to set it on the builder.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Describe the image')
+                    ->model('gpt-4-vision-preview')
+                    ->image('local-path-or-url');
+            </code-block>
+            <p>
+                Image can either be a local file path or a publicly accessible URL.
+            </p>
+            <p>
+                You can call <code>image</code> multiple times to add more images.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Describe the image.')
+                    ->model('gpt-4-vision-preview')
+                    ->image('/some/path/photo.jpg')
+                    ->image('http://www.example.com/image.png');
+            </code-block>
+            <p>
+                Images require more token, so be sure to increase the number of tokens than
+                can be used.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Describe the images.')
+                    ->model('gpt-4-vision-preview')
+                    ->image('/some/path/photo.jpg')
+                    ->image('http://www.example.com/image.png')
+                    ->maxTokens(2000);
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-images" title="images()">
+            <p>
+                Used to analyse multiple images. This feature is currently only supported by the
+                <code>gpt-4-vision-preview</code> model so be sure to set it on the builder.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Describe the images')
+                    ->model('gpt-4-vision-preview')
+                    ->maxTokens(2000)
+                    ->images(['/some/path/photo.jpg', 'http://www.example.com/image.png']);
+            </code-block>
+            <warning title="Important">
+                <p>
+                    <code>images()</code> replaces all the images currently listed on the builder.
+                </p>
+                <p>
+                    You can use <code>image()</code> and <code>images()</code> together, but you
+                    must call <code>images()</code> before any <code>image()</code> calls.
+                </p>
+            </warning>
+            <code-block lang="php">
+                // This has one image
+                $builder = AI::chat('Describe the image.')
+                    ->model('gpt-4-vision-preview')
+                    ->image('/some/path/photo.jpg')
+                    ->images(['http://www.example.com/image.png']);
+
+                // This has two images
+                $builder = AI::chat('Describe the image.')
+                    ->model('gpt-4-vision-preview')
+                    ->images(['/some/path/photo.jpg'])
+                    ->image('http://www.example.com/image.png');
+            </code-block>
+            <p>
+                Images require more token, so be sure to increase the number of tokens than
+                can be used.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Describe the images.')
+                    ->model('gpt-4-vision-preview')
+                    ->image('/some/path/photo.jpg')
+                    ->image('http://www.example.com/image.png')
+                    ->maxTokens(2000);
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-max-tokens" title="maxTokens()">
+            <p>
+                Used to set the maximum tokens a request can use.
+            </p>
+            <p>
+                If the request exceeds the number of tokens, the request will throw a
+                <code>TokenLimitException</code> to denote the response is incomplete.
+            </p>
+            <code-block lang="php">
+                $builder = AI::chat('Who was the first man on the moon?')
+                    ->maxTokens(1000);
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-streaming" title="streaming()">
+            <p>
+                Used to stream the response back from Open AI, useful for creating chatbots
+                as you will receive the message as it is generated.
+            </p>
+            <p>
+                Streaming involves two responses, the partial or chucked responses that
+                occur whilst the response is still being generated, and the final response.
+            </p>
+            <p>
+                To use streaming we need to create a callback function that will be
+                called whenever content is received.
+            </p>
+            <code-block lang="php">
+                // Define the callback function
+                $callbackFunction = function (ChatCompletionResponse $response) {
+                    // Is the response complete?
+                    $isComplete = $response->isComplete();
+
+                    // Print the content received in this chunk
+                    echo $response;
+                };
+
+                // Execute the request
+                $finalResponse = AI::chat('Write a story about sunrise.')
+                    ->maxTokens(500)
+                    ->streaming($callbackFunction)
+                    ->execute();
+
+                // Print the whole response
+                echo $response;
+            </code-block>
+        </chapter>
+        <chapter id="chat-builder-use-function" title="useFunction()">
+            <p>
+                You can empower GPT in any way you choose by allowing GPT to call functions
+                within your application.
+            </p>
+            <p>
+                GPT is not date or time aware, we can enable this by creating a function
+                that returns the date and time, then connect that function to GPT so
+                that it is table to call the function to obtain the information.
+            </p>
+            <code-block lang="php">
+                // Create a function to get the date and time
+                $getDateTime = fn() => date('Y-m-d H:i:s');
+
+                // Create the builder with a question about the date
+                $builder = AI::chat('What is the date today?');
+
+                // Connect the function
+                $builder->useFunction(
+                    function (FunctionBuilder $functionBuilder) use ($getDateTime) {
+                        // Tell GPT the name of the function
+                        $functionBuilder->name('getDateTime');
+
+                        // Describe the function to GPT
+                        $functionBuilder->description('Returns the current date and time');
+
+                        // Connect the function to the builder
+                        $functionBuilder->function($getDateTime);
+                    }
+                );
+
+                // Execute the builder
+                $response = $builder->execute();
+
+                // Print the response
+                echo $response;
+            </code-block>
+            <p>
+                We can add multiple functions that do many different things and empower GPT
+                to use your application to carry out tasks.
+            </p>
+            <p>
+                We can use the function builder to describe complex functions with multiple
+                parameters, see <a href="Function-calling.topic">Function calling</a> for
+                a more in depth examples.
+            </p>
+        </chapter>
+    </chapter>
+    <chapter id="chat-response" title="Response">
+
+    </chapter>
+</topic>

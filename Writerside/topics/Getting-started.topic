@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Getting started" id="Getting-started">
+
+    <chapter id="getting-started-installation" title="Installing">
+        <p>
+            Install using composer.
+        </p>
+        <code-block lang="bash">
+            composer require mbruton/php-gpt
+        </code-block>
+    </chapter>
+    <chapter id="getting-started-config" title="Configuring">
+        <p>
+            Before you can use the library you need to set your Open AI api key. You can do this
+            one of two ways.
+        </p>
+        <chapter id="getting-started-config-env" title="Environment variable">
+            <p>
+                Set an environment variable named <code>PHPGPT_OPENAI_API_KEY</code> to the
+                value of your api key.
+            </p>
+        </chapter>
+        <chapter id="getting-started-config-manual" title="Via the AI class">
+            <p>
+                You can also set the api key using the <code>AI</code> class.
+            </p>
+            <code-block lang="php">
+                use PhpGpt\AI;
+
+                AI::setApiKey('api-key-here');
+            </code-block>
+        </chapter>
+    </chapter>
+    <chapter id="getting-started-try" title="Give it a go">
+        <p>
+            Let's check everything is working.
+        </p>
+        <code-block lang="php">
+            echo AI::chat('Tell me a joke.');
+        </code-block>
+    </chapter>
+</topic>

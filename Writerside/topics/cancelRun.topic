@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="cancelRun()" id="cancelRun">
+
+    <p>Cancels a run that is in progress.</p>
+    <chapter id="cancelRun-basic" title="Basic usage">
+        <p>
+            You need to supply both the <code>thread Id</code> and the <code>run Id</code> to
+            cancel the run.
+        </p>
+        <code-block lang="php">
+            $response = AI::cancelRun($threadId, $runId)
+                ->execute();
+        </code-block>
+        <p>
+            Both parameters are optional at the time of construction and can be supplied later
+            via the methods on the builder.
+        </p>
+        <code-block lang="php">
+            $builder = AI::cancelRun();
+            $builder->thread($threadId);
+            $builder->run($threadId);
+
+            $response = $builder->execute();
+        </code-block>
+    </chapter>
+</topic>

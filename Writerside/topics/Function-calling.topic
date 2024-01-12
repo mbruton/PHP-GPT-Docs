@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Function calling" id="Function-calling">
+
+    <p>
+        Function calling is supported by both the chat and assistants services and allow
+        us to connect PHP function directly to GPT.
+    </p>
+    <p>
+        The builder objects for <code>createAssistant()</code> and <code>chat()</code>
+        both offer the method <code>useFunction()</code> which can be used to attach
+        a PHP function to GPT.
+    </p>
+    <p>
+        Start by creating the builder.
+    </p>
+    <code-block lang="php">
+        $builder = AI::chat();
+
+        // Or
+
+        $builder = AI::createAssistant();
+    </code-block>
+    <p>
+        The <code>useFunction()</code> method expects a closure which is passed a <code>FunctionBuilder</code>
+        which can be used to describe and connect the function to GPT.
+    </p>
+    <code-block lang="php">
+        $builder->useFunction(
+            function (FunctionBuilder $functionBuilder) {
+                // We define our function here
+            }
+        );
+    </code-block>
+    <chapter id="function-calling-function-builder" title="Function builder">
+        <p>
+            The function builder has a number of methods that we can use richly describe
+            and connect our function.
+        </p>
+        <chapter id="function-calling-function-builder-name" title="name()">
+            <p>
+                Used to tell GPT the name of the function. GPT will use this name to execute the
+                function at a later time.  It's a good idea to name the function in a meaningful
+                way.
+            </p>
+            <code-block lang="php">
+                $functionBuilder->name('getDateTime');
+            </code-block>
+        </chapter>
+        <chapter id="function-calling-function-builder-description" title="describe()">
+            <p>
+                Used to describe what the function does to GPT. You should make this description
+                as detailed as possible as this is how GPT knows what the function is for and
+                how it should be used.
+            </p>
+            <code-block lang="php">
+                $functionBuilder->describe('Returns the current date and time in the format Y-m-d H:i:s.');
+            </code-block>
+        </chapter>
+        <chapter id="function-calling-function-builder-parameter" title="parameter()">
+            <p>
+                Used to describe any parameters the function may have. This method does not work
+                the same way as the rest of the methods on the function builder do. All the other
+                methods on the function builder return itself to allow it to be built fluidly.
+            </p>
+            <p>
+                The <code>parameter()</code> method returns a parameter builder object that can
+                be used to construct the parameter description.
+            </p>
+            <code-block lang="php">
+                $parameterBuilder = $functionBuilder->parameter('format');
+            </code-block>
+            <p>
+                The parameter method requires a single argument that is the name of the parameter.
+            </p>
+            <p>
+                The returned parameter builder can be used to describe the parameter.
+            </p>
+            <p>
+                There are a number of methods that we can use on the parameter builder to describe
+                the parameter.  See the section below for a full description of the parameter
+                builder.
+            </p>
+        </chapter>
+        <chapter id="function-calling-function-builder-function" title="function()">
+            <p>
+                Used to provide the actual PHP function that we wish to connect to GPT.
+            </p>
+            <code-block lang="php">
+                $parameterBuilder = $functionBuilder->function(
+                    fn() => date('Y-m-d H:i:s')
+                );
+            </code-block>
+            <p>
+                If we had defined any parameters, they will be made available to us as an
+                associative array as the first parameter passed to the function.
+            </p>
+            <code-block lang="php">
+                $parameterBuilder = $functionBuilder->function(
+                    fn(array $params) => date($params['format'] ?? 'Y-m-d H:i:s')
+                );
+            </code-block>
+        </chapter>
+    </chapter>
+    <chapter id="function-calling-parameter-builder" title="Parameter builder">
+        <p>
+            The parameter builder allows us to describe the parameters of our function.
+        </p>
+        <chapter id="function-calling-parameter-type" title="type()">
+            <p>
+                Allows us to specify the expected data type of the parameter.
+            </p>
+            <p>
+                According to Open AI documentation the type is derived from <a href="https://json-schema.org/understanding-json-schema/reference/type">JSON Schema</a>
+                types. Typically, this would include the following:
+            </p>
+            <list>
+                <li><code>string</code></li>
+                <li><code>number</code></li>
+                <li><code>object</code></li>
+                <li><code>array</code></li>
+                <li><code>boolean</code></li>
+                <li><code>null</code></li>
+            </list>
+            <p>
+                The Open AI documentation also indicates the <code>enum</code> maybe used. You will
+                also need to call the <code>enum()</code> method on the builder to supply the allowed
+                values.
+            </p>
+            <p>
+                At present PHP-GPT does not offer a way to describe objects, so you would need
+                to describe the object with natural language using the <code>description()</code>
+                method.
+            </p>
+            <code-block lang="php">
+                // From the parameter builder directly
+                $parameterBuilder->type('string');
+
+                // Or via the function builder
+                $functionBuilder->parameter('format')
+                    ->type('string');
+            </code-block>
+        </chapter>
+        <chapter id="function-calling-parameter-description" title="description()">
+            <p>
+                Used to describe the parameter to GPT.  This should be a rich description that
+                would enable anyone that reads it how to use the parameter.
+            </p>
+            <code-block lang="php">
+                // From the parameter builder directly
+                $parameterBuilder->description('Accepts a date format using PHP date syntax.');
+
+                // Or via the function builder
+                $functionBuilder->parameter('format')
+                    ->type('string')
+                    ->description('Accepts a date format using PHP date syntax.');
+            </code-block>
+        </chapter>
+        <chapter id="function-calling-parameter-required" title="required()">
+            <p>
+                Used to specify that a parameter is required. Parameters are optional by default.
+            </p>
+            <p>
+                The method accepts a single argument which is a boolean that denotes if it is required of
+                not.  It defaults to <code>true</code> when not specified.
+            </p>
+            <code-block lang="php">
+                // From the parameter builder directly
+                $parameterBuilder->required();
+
+                // Or via the function builder
+                $functionBuilder->parameter('format')
+                    ->type('string')
+                    ->description('Accepts a date format using PHP date syntax.')
+                    ->required();
+            </code-block>
+        </chapter>
+        <chapter id="function-calling-parameter-pattern" title="pattern()">
+            <p>
+                Used to supply a regular expression which will be used to evaluate the input.
+            </p>
+            <warning title="Important">
+                <p>
+                    PHP-GPT does not use this pattern, it is supplied to GPT but maybe ignored.
+                </p>
+                <p>
+                    If you use this feature you may want to test it first, if you have issues, try to
+                    describe the expectation using the <code>description()</code> method.
+                </p>
+            </warning>
+            <code-block lang="php">
+                // From the parameter builder directly
+                $parameterBuilder->pattern('^.*$');
+
+                // Or via the function builder
+                $functionBuilder->parameter('format')
+                    ->type('string')
+                    ->description('Accepts a date format using PHP date syntax.')
+                    ->required()
+                    ->pattern('^.*$');
+            </code-block>
+        </chapter>
+        <chapter id="function-calling-parameter-enum" title="enum()">
+            <p>
+                Used to supply an array of possible values when the type has been set to
+                <code>enum</code>.
+            </p>
+            <code-block lang="php">
+                // From the parameter builder directly
+                $parameterBuilder->type('enum')
+                    ->enum(['one', 'two', 'three']);
+
+                // Or via the function builder
+                $functionBuilder->parameter('some_param_name')
+                    ->type('enum')
+                    ->enum(['one', 'two', 'three']);
+            </code-block>
+        </chapter>
+    </chapter>
+    <chapter id="function-calling-examples" title="Examples">
+        <p>
+            Let's start with a really simple function without any parameters, the
+            get date function we looked at earlier.
+        </p>
+        <p>
+            Here is a full working example using the chat builder.
+        </p>
+        <code-block lang="php">
+            // Define the getDateTime function
+            $getDateTime = fn() => date('Y-m-d H:i:s');
+
+            // Create the chat builder
+            $chatBuilder = AI::chat();
+
+            // Attach the function
+            $chatBuilder->useFunction(function (FunctionBuilder $functionBuilder) use ($getDateTime) {
+                // Name and describe the function
+                $functionBuilder->name('getDateTime')
+                    ->description('Returns the current date and time.');
+
+                // Attach the function
+                $functionBuilder->function($getDateTime);
+            });
+
+            // Ask what the date is
+            $chatBuilder->userMessage('What is the date today?');
+
+            // Execute the request
+            $response = $chatBuilder->execute();
+
+            // Print the response
+            echo "AI says: " . $response . "\n";
+        </code-block>
+        <p>
+            If you run this a few times you may notice that sometimes the function is used,
+            and sometimes GPT reports that it doesn't know the date.
+        </p>
+        <p>
+            We can improve this by using the system message to instruct GPT to check if a function
+            can help.
+        </p>
+        <code-block lang="php">
+            // Define the getDateTime function
+            $getDateTime = fn() => date('Y-m-d H:i:s');
+
+            // Create the chat builder
+            $chatBuilder = AI::chat();
+
+            // Attach the function
+            $chatBuilder->useFunction(function (FunctionBuilder $functionBuilder) use ($getDateTime) {
+                // Name and describe the function
+                $functionBuilder->name('getDateTime')
+                    ->description('Returns the current date and time.');
+
+                // Attach the function
+                $functionBuilder->function($getDateTime);
+            });
+
+            // Ask what the date is
+            $chatBuilder->userMessage('What is the date today?');
+
+            // Instruct GPT to use functions
+            $chatBuilder->systemMessage("If you don't know the answer, check if a function can help.");
+
+            // Execute the request
+            $response = $chatBuilder->execute();
+
+            // Print the response
+            echo "AI says: " . $response . "\n";
+        </code-block>
+        <p>
+            Let's improve this example, let's provide GPT with a way of checking if a particular
+            date is a public holiday (UK).
+        </p>
+        <p>
+            We will provide two functions, the first will return the current date,
+            the second check if a date is a public holiday.
+        </p>
+        <code-block lang="php">
+            // Create the getDate function
+            $getDate = fn() => date('Y-m-d');
+
+            // Create a function to check if a date is a holiday
+            $isPublicHoliday = function (array $params) : bool {
+                $holidays = json_decode(file_get_content('https://www.gov.uk/bank-holidays.json'), true);
+                $dates = array_merge(
+                    array_map(fn($event) => $event['date'], $holidays['england-and-wales']['events']),
+                    array_map(fn($event) => $event['date'], $holidays['scotland']['events']),
+                    array_map(fn($event) => $event['date'], $holidays['northern-ireland']['events']),
+                );
+
+                return in_array($params['date'], $dates);
+            }
+
+            // Create the chat builder
+            $chatBuilder = AI::chat('Is today a public holiday in the UK?')
+                ->systemMessage('If you are unable to answer, check if any tools can help')
+                ->model('gpt-4-1106-preview');
+
+            // Add the getDate function
+            $chatBuilder->useFunction(function (FunctionBuilder $functionBuilder) use ($getDate) {
+                // Name and describe the function
+                $functionBuilder->name('getDate')
+                    ->description('Returns the current date.');
+
+                // Attach the function
+                $functionBuilder->function($getDate);
+            });
+
+            // Add the isPublicHoliday function
+            $chatBuilder->useFunction(function (FunctionBuilder $functionBuilder) use ($isPublicHoliday) {
+                // Name and describe the function
+                $functionBuilder->name('isPublicHoliday')
+                    ->description('Returns a bool indicating if the given date is a public holiday in the UK.')
+                    ->function($isPublicHoliday);
+
+                // Describe the parameter
+                $functionBuilder->parameter('name')
+                    ->description('The date to check in the format Y-m-d')
+                    ->type('string')
+                    ->required();
+            });
+
+            // Execute the request
+            $response = $chatBuilder->execute();
+
+            // Print the response
+            echo "AI says: " . $response . "\n";
+        </code-block>
+<!--        <p>-->
+<!--            Whilst these examples are focused on the chat builder, you can also describe functions-->
+<!--            in the exact same way using the <code>createAssistant()</code> builder.-->
+<!--        </p>-->
+<!--        <code-block lang="php">-->
+<!--            // Create the assistant builder-->
+<!--            $createAssistantBuilder = AI::createAssistant('test-assistant')-->
+<!--                ->description('Date aware assistant')-->
+<!--                ->model('gpt-4-1106-preview')-->
+<!--                ->instructions('You are a help assistant and you can use tools to help answer questions.');-->
+
+<!--            // Add the getDate function-->
+<!--            $chatBuilder->useFunction(function (FunctionBuilder $functionBuilder) {-->
+<!--                // Name and describe the function-->
+<!--                $functionBuilder->name('getDate')-->
+<!--                    ->description('Returns the current date.');-->
+
+<!--                // Attach the function-->
+<!--                $functionBuilder->function(fn() => date('Y-m-d'));-->
+<!--            });-->
+
+<!--            // Create the assistant-->
+<!--            $response = $createAssistantBuilder->execute();-->
+
+<!--            // Print the assistant id-->
+<!--            echo 'Assistant ID: ' . $response . PHP_EOL;-->
+<!--        </code-block>-->
+    </chapter>
+</topic>

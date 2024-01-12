@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="AI" id="AI">
+
+    <code-block lang="php">
+        use PhpGpt\AI;
+    </code-block>
+    <p>
+        A swiss-army knife for accessing the Open AI API in a simple-to-use way.
+    </p>
+    <p>
+        The <code>AI</code> class makes all the Open AI services available to us via simple
+        helper methods.
+    </p>
+    <p>
+        These helper methods return builder objects that can be used to construct requests
+        fluidly.
+    </p>
+    <p>
+        The requests can be fluidly executed to obtain the response.
+    </p>
+    <p>
+        The response has been designed to be simple to use without needing any further documentation.
+    </p>
+    <p>
+        Let's start with a complex example, we will write a story about a fox that jumps over a wall,
+        we will then create a picture, and generate a caption for the picture. Then finally
+        create an audio version of the story.
+    </p>
+    <p>
+        The <code>AI</code> class makes this simple.
+    </p>
+    <code-block lang="php">
+        // Write the story
+        $story = (string) AI::chat('Write a story about a fox that jumps over a wall.');
+
+        // Create the image
+        $imageUrl = (string) AI::createImage('A picture of a fox jumping over a wall');
+
+        // Caption the image
+        $caption = (string) AI::chat('Write a short caption for the supplied picture.')
+            ->model('gpt-4-vision-preview')
+            ->image($imageUrl);
+
+        // Create the audio version
+        $mp3File = (string) AI::createSpeech($story);
+    </code-block>
+    <p>
+        You'll notice how simple the requests are to construct, and you'll notice how we didn't
+        need to execute the request explicitly.
+    </p>
+    <p>
+        This happened because we cast the output as string, and this caused the builder to
+        construct and execute the request followed by returning the response.
+    </p>
+    <p>
+        The response is also an object however when it is cast to a string it returns the content
+        you are most likely going to use.
+    </p>
+    <p>
+        We can construct and execute requests in a more granular approach if we require more control.
+    </p>
+    <code-block lang="php">
+        // Create the image builder
+        $imageBuilder = AI::createImage('A cute kitten.');
+
+        // Configure the request
+        $imageBuilder->model('dall-e-3');
+
+        // Execute the request and get the response
+        $response = $imageBuilder->execute();
+
+        // Print the URL
+        echo $response->getResults()[0];
+    </code-block>
+    <p>
+        We could cast either the builder or the response to a string to shortcut the rest
+        of the steps.
+    </p>
+    <code-block lang="php">
+        // Create and configure the builder
+        $imageBuilder = AI::createImage('A cute kitten.')
+            ->model('dall-e-3')
+            ->quality('hd');
+
+        // From here we can obtain the URL by casting to a string
+        $url = (string) $imageBuilder;
+
+        // If we do need to manually execute it, we can then cast the response
+        $response = $imageBuilder->execute();
+        $url = (string) $response;
+    </code-block>
+    <p>
+        Because the builders and responses can both be cast as strings, in most cases we
+        can simply cast everything and shortcut the process.
+    </p>
+    <code-block lang="php">
+        // Shortcut the execution and response steps
+        $url = (string) AI::createImage('A cute kitten.')
+            ->model('dall-e-3')
+            ->quality('hd');
+    </code-block>
+    <chapter id="ai-bindings" title="Bindings">
+        <p>
+            All builders support bindings via the <code>Prompt</code> class which is internally
+            used to represent prompts.
+        </p>
+        <p>
+            We can embed variables into the prompts using <code>{{ this }}</code> syntax.
+        </p>
+        <p>
+            We can then either call <code>bind()</code> or <code>bindings()</code> to set the
+            values.
+        </p>
+        <code-block lang="php">
+            // Using bind()
+            $builder = AI::createImage('A cute {{ animal }}.')
+                ->bind('animal', 'fox');
+
+            // Using bindings()
+            $builder = AI::createImage('A cute {{ animal }}.')
+                ->bindings(['animal' => 'fox']);
+        </code-block>
+    </chapter>
+    <chapter id="ai-error-handling" title="Error handling">
+        <p>
+
+        </p>
+    </chapter>
+</topic>

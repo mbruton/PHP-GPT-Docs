@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="PHP-GPT" id="PHP-GPT">
+
+    <p>
+        A PHP library that infuses the magic of OpenAI's GPT, with PHP.
+    </p>
+    <p>
+        Offering a simple and elegant interface using a fluid design and a smart approach to
+        working with responses, PHP-GPT makes working with AI simple.
+    </p>
+    <code-block lang="php">
+        echo AI::chat('Tell me a joke');
+    </code-block>
+    <p>
+        Offering a wide range of services.
+    </p>
+    <p>
+        Such as text to speech.
+    </p>
+    <code-block lang="php">
+        $mp3FilePath = (string) AI::createSpeech('Hello, how are you?');
+    </code-block>
+    <p>
+        Or image generation.
+    </p>
+    <code-block lang="php">
+        $imageUrl = (string) AI::createImage('A cute picture of a fox');
+    </code-block>
+    <p>
+        Packed with features such as image and document analyse, streaming, assistant creation
+        and management.
+    </p>
+    <p>
+        And the more powerful features such as deeply integrating your PHP application with AI
+        allowing AI to execute your code to complete the tasks you have given it.
+    </p>
+</topic>

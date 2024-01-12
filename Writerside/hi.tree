@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="hi"
+                 name="PHP-GPT"
+                  start-page="PHP-GPT.topic">
+
+    <toc-element topic="PHP-GPT.topic"/>
+    <toc-element topic="Getting-started.topic"/>
+    <toc-element topic="Documenation.topic">
+        <toc-element topic="AI.topic">
+            <toc-element topic="cancelRun.topic"/>
+            <toc-element topic="chat.topic"/>
+            <toc-element topic="createAssistant.topic"/>
+            <toc-element topic="createImage.topic"/>
+            <toc-element topic="createMessage.topic"/>
+            <toc-element topic="createRun.topic"/>
+            <toc-element topic="createSpeech.topic"/>
+            <toc-element topic="createThread.topic"/>
+            <toc-element topic="createTranscription.topic"/>
+            <toc-element topic="createTranslation.topic"/>
+            <toc-element topic="deleteAssistant.topic"/>
+            <toc-element topic="deleteFile.topic"/>
+            <toc-element topic="deleteThread.topic"/>
+            <toc-element topic="editImage.topic"/>
+            <toc-element topic="listAssistants.topic"/>
+            <toc-element topic="listFiles.topic"/>
+            <toc-element topic="listMessages.topic"/>
+            <toc-element topic="listRuns.topic"/>
+            <toc-element topic="listRunSteps.topic"/>
+            <toc-element topic="modifyAssistant.topic"/>
+            <toc-element topic="modifyMessage.topic"/>
+            <toc-element topic="modifyRun.topic"/>
+            <toc-element topic="modifyThread.topic"/>
+            <toc-element topic="retrieveAssistant.topic"/>
+            <toc-element topic="retreiveFile.topic"/>
+            <toc-element topic="retrieveFileContent.topic"/>
+            <toc-element topic="retrieveMessage.topic"/>
+            <toc-element topic="retrieveRun.topic"/>
+            <toc-element topic="retrieveRunStep.topic"/>
+            <toc-element topic="retrieveThread.topic"/>
+            <toc-element topic="submitToolOutputsToRun.topic"/>
+            <toc-element topic="uploadFile.topic"/>
+            <toc-element topic="varyImage.topic"/>
+        </toc-element>
+    </toc-element>
+    <toc-element topic="Guides.topic">
+        <toc-element topic="Assistants.topic"/>
+        <toc-element topic="Function-calling.topic"/>
+    </toc-element>
+</instance-profile>

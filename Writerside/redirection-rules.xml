@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="45e2ace2">
+        <description>Created after removal of "Getting started" from Help Instance</description>
+        <accepts>Getting-started.html</accepts>
+    </rule>
+    <rule id="26a7a0c3">
+        <description>Created after removal of "Getting started" from Help Instance</description>
+        <accepts>Getting-started.html</accepts>
+    </rule>
+    <rule id="30a650aa">
+        <description>Created after removal of "This is the first topic" from PHP-GPT</description>
+        <accepts>Default-topic.html</accepts>
+    </rule>
+    <rule id="5b1f3caa">
+        <description>Created after removal of "PHP-GPT" from PHP-GPT</description>
+        <accepts>PHP-GPT.html</accepts>
+    </rule>
+    <rule id="6c60825a">
+        <description>Created after removal of "Articles" from PHP-GPT</description>
+        <accepts>Articles.html</accepts>
+    </rule>
+    <rule id="6fcddc08">
+        <description>Created after removal of "Deep dive" from PHP-GPT</description>
+        <accepts>Deep-dive.html</accepts>
+    </rule>
+    <rule id="787a4477">
+        <description>Created after removal of "Tutorials" from PHP-GPT</description>
+        <accepts>Tutorials.html</accepts>
+    </rule>
+    <rule id="586b5f12">
+        <description>Created after removal of "Application integration" from PHP-GPT</description>
+        <accepts>Application-integration.html</accepts>
+    </rule>
+    <rule id="1120d865">
+        <description>Created after removal of "Chatbots" from PHP-GPT</description>
+        <accepts>Chatbots.html</accepts>
+    </rule>
+    <rule id="644aea14">
+        <description>Created after removal of "Document analysis" from PHP-GPT</description>
+        <accepts>Document-analysis.html</accepts>
+    </rule>
+    <rule id="6d13ba27">
+        <description>Created after removal of "Image analysis" from PHP-GPT</description>
+        <accepts>Image-analysis.html</accepts>
+    </rule>
+    <rule id="174f71e1">
+        <description>Created after removal of "Documentation" from PHP-GPT</description>
+        <accepts>Documentation.html</accepts>
+    </rule>
+    <rule id="3f0c6b68">
+        <description>Created after removal of "Prompt" from PHP-GPT</description>
+        <accepts>Prompt.html</accepts>
+    </rule>
+    <rule id="1a6c082d">
+        <description>Created after removal of "AI" from PHP-GPT</description>
+        <accepts>AI.html</accepts>
+    </rule>
+    <rule id="44c9f612">
+        <description>Created after removal of "Assistant services" from PHP-GPT</description>
+        <accepts>Assistants-service.html</accepts>
+    </rule>
+    <rule id="39c24273">
+        <description>Created after removal of "Audio services" from PHP-GPT</description>
+        <accepts>Audio-services.html</accepts>
+    </rule>
+    <rule id="5debde8e">
+        <description>Created after removal of "Chat services" from PHP-GPT</description>
+        <accepts>Chat-services.html</accepts>
+    </rule>
+    <rule id="1f371614">
+        <description>Created after removal of "File services" from PHP-GPT</description>
+        <accepts>Files-service.html</accepts>
+    </rule>
+    <rule id="7d3da67d">
+        <description>Created after removal of "Image services" from PHP-GPT</description>
+        <accepts>Image-services.html</accepts>
+    </rule>
+    <rule id="3ce0f3cd">
+        <description>Created after removal of "Message services" from PHP-GPT</description>
+        <accepts>Message-services.html</accepts>
+    </rule>
+    <rule id="31893772">
+        <description>Created after removal of "Run services" from PHP-GPT</description>
+        <accepts>Run-services.html</accepts>
+    </rule>
+    <rule id="74a94dfe">
+        <description>Created after removal of "Thread services" from PHP-GPT</description>
+        <accepts>Thread-services.html</accepts>
+    </rule>
+    <rule id="28ac294">
+        <description>Created after removal of "Function calling" from PHP-GPT</description>
+        <accepts>Function-calling.html</accepts>
+    </rule>
+    <rule id="5ca12ecf">
+        <description>Created after removal of "Old" from PHP-GPT</description>
+        <accepts>Old.html</accepts>
+    </rule>
+    <rule id="264a0a84">
+        <description>Created after removal of "Getting started" from PHP-GPT</description>
+        <accepts>Getting-started.html</accepts>
+    </rule>
+    <rule id="58ce4dcd">
+        <description>Created after removal of "Getting started" from PHP-GPT</description>
+        <accepts>Getting-started.html</accepts>
+    </rule>
+</rules>
