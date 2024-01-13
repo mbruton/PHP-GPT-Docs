@@ -127,7 +127,87 @@
     </chapter>
     <chapter id="ai-error-handling" title="Error handling">
         <p>
-
+            During the course of execution there are a number of exceptions that can
+            occur for various reasons.
         </p>
+        <chapter id="ai-error-handling-request" title="Request exception">
+            <code-block lang="php">
+                use PhpGpt\Exceptions\Http\HttpException;
+            </code-block>
+            <p>
+                Is thrown for any request related exception that occurs within the transport
+                layer.
+            </p>
+            <note title="Request configuration">
+                <p>
+                    For <code>400 - Bad request</code> you may have supplied a configuration
+                    that is not supported by the model.
+                </p>
+                <p>
+                    Be sure to check the OpenAI documentation.
+                </p>
+            </note>
+            <p>
+                You can obtain the int value for the status code with the method <code>getStatus()</code>.
+            </p>
+            <p>
+                You can obtain the returned headers as an array with <code>getHeaders()</code> and you
+                can obtain the raw string response with <code>getBody()</code>.
+            </p>
+            <p>
+                The previous exception in the chain will be a Guzzle <code>RequestException</code>.
+            </p>
+        </chapter>
+        <chapter id="ai-error-handling-rate-limit" title="Rate limit exceed exception">
+            <code-block lang="php">
+                use PhpGpt\Exceptions\Http\RateLimitExceedException;
+            </code-block>
+            <p>
+                Is throw whenever the OpenAI api return a <code>429 - Rate limit exceed</code>.
+            </p>
+            <p>
+                This exception inherits from the <code>HttpException</code> and is functionally
+                identical.
+            </p>
+            <p>
+                It is included to allow easier catching of this specific state.
+            </p>
+            <note title="Pipelines to the recuse">
+                <p>
+                    The <code>Pipeline</code> class allows you to manage and retry requests
+                    that fail due to rate limitations.
+                </p>
+            </note>
+        </chapter>
+        <chapter id="ai-error-handling-content-filter" title="Content filter exception">
+            <code-block lang="php">
+                use PhpGpt\Exceptions\ResponseReason\ContentFilterException;
+            </code-block>
+            <p>
+                This exception is thrown when either the input or the output is in breech
+                of OpenAI's content policy.
+            </p>
+            <p>
+                You can still obtain the response by calling the <code>getResponse()</code>
+                method on the exception, however, the content is likely not what you are expecting.
+            </p>
+        </chapter>
+        <chapter id="ai-error-handling-token-limit" title="Token limit exception">
+            <code-block lang="php">
+                use PhpGpt\Exceptions\ResponseReason\TokenLimitException;
+            </code-block>
+            <p>
+                This exception is thrown if the model has not completed the response by the
+                time the token limit was reached.
+            </p>
+            <p>
+                The incomplete response can be accessed via the <code>getResponse()</code> method.
+            </p>
+            <p>
+                Retry the request with a higher token limit (you can use the <code>maxTokens()</code> method
+                on the builder to do this). If you still experience issue, and you reach the model limit, you
+                can try and reduce the content using AI to summarise before attempting the request.
+            </p>
+        </chapter>
     </chapter>
 </topic>

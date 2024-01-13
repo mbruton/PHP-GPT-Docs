@@ -10,7 +10,7 @@
             Install using composer.
         </p>
         <code-block lang="bash">
-            composer require mbruton/php-gpt
+            composer require TBC
         </code-block>
     </chapter>
     <chapter id="getting-started-config" title="Configuring">
