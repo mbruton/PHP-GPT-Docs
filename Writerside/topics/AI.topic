@@ -28,7 +28,7 @@
     <p>
         Let's start with a complex example, we will write a story about a fox that jumps over a wall,
         we will then create a picture, and generate a caption for the picture. Then finally
-        create an audio version of the story.
+        we will create an audio version of the story.
     </p>
     <p>
         The <code>AI</code> class makes this simple.
@@ -130,7 +130,7 @@
             During the course of execution there are a number of exceptions that can
             occur for various reasons.
         </p>
-        <chapter id="ai-error-handling-request" title="Request exception">
+        <chapter id="ai-error-handling-request" title="HTTP exception">
             <code-block lang="php">
                 use PhpGpt\Exceptions\Http\HttpException;
             </code-block>
@@ -163,7 +163,7 @@
                 use PhpGpt\Exceptions\Http\RateLimitExceedException;
             </code-block>
             <p>
-                Is throw whenever the OpenAI api return a <code>429 - Rate limit exceed</code>.
+                Is thrown whenever the OpenAI api return a <code>429 - Rate limit exceed</code>.
             </p>
             <p>
                 This exception inherits from the <code>HttpException</code> and is functionally
@@ -205,7 +205,7 @@
             </p>
             <p>
                 Retry the request with a higher token limit (you can use the <code>maxTokens()</code> method
-                on the builder to do this). If you still experience issue, and you reach the model limit, you
+                on the builder to do this). If you still experience issues, and you reach the model limit, you
                 can try and reduce the content using AI to summarise before attempting the request.
             </p>
         </chapter>

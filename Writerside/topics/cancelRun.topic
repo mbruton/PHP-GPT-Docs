@@ -27,4 +27,31 @@
             $response = $builder->execute();
         </code-block>
     </chapter>
+    <seealso>
+        <category ref="guides">
+            <a href="Assistants-guide.topic"/>
+        </category>
+        <category ref="services">
+            <a href="Assistant-service.topic"/>
+            <a href="Audio-services.topic"/>
+            <a href="Chat-services.topic"/>
+            <a href="File-services.topic"/>
+            <a href="Image-services.topic"/>
+        </category>
+        <category ref="service-assistants">
+            <a href="Assistants.topic">Assistants</a>
+            <a href="Messages.topic">Messages</a>
+            <a href="Runs.topic">Runs</a>
+            <a href="Threads.topic">Threads</a>
+        </category>
+        <category ref="service-assistants-runs">
+            <a href="createRun.topic">Create run</a>
+            <a href="cancelRun.topic">Cancel run</a>
+            <a href="listRuns.topic">List runs</a>
+            <a href="listRunSteps.topic">List run steps</a>
+            <a href="retrieveRun.topic">Retrieve run</a>
+            <a href="retrieveRunStep.topic">Retrieve run steps</a>
+            <a href="modifyRun.topic">Modify run</a>
+        </category>
+    </seealso>
 </topic>

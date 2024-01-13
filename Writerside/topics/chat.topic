@@ -295,6 +295,160 @@
         </chapter>
     </chapter>
     <chapter id="chat-response" title="Response">
+        <code-block lang="php">
+            use PhpGpt\Responses\Chat\ChatCompletionResponse;
+        </code-block>
+        <p>
+            The response object is a wrapper that may contain multiple responses. This can
+            happen if function calling is in use or streaming as these require multiple
+            requests to satisfy.
+        </p>
+        <p>
+            Additionally, it is possible when using the streaming feature to receive
+            an incomplete response.
+        </p>
+        <p>
+            In the case of the chat response, it's helpful to understand a little about
+            what is happening internally within PHP-GPT.
+        </p>
+        <p>
+            When we construct a chat request we use a builder object. The builder creates
+            a new <code>ChatCompletionApiRequest</code> object and then makes the request
+            to OpenAI.
+        </p>
+        <p>
+            The internal OpenAI service in PHP-GPT returns either a <code>ChatCompletionApiResponse</code>,
+            or <code>ChatCompletionChunkApiResponse</code> in response to the request.
+        </p>
+        <p>
+            Typically, you would never see or interact with these objects because PHP-GPT
+            returns the <code>ChatCompletionResponse</code> to you instead.
+        </p>
+        <chapter id="chat-response-is-complete" title="isComplete()">
+            <p>
+                This method returns a boolean indicating if the response is complete.
+            </p>
+            <p>
+                In all cases apart from streaming this will be <code>true</code>.
+            </p>
+            <p>
+                In the case of streaming, this will only be true if the stream has completed.
+            </p>
+            <code-block lang="php">
+                // Is this the final response?
+                $finalResponse = $response->isComplete();
+            </code-block>
+        </chapter>
+        <chapter id="chat-response-getapirequest" title="getApiRequest()">
+            <p>
+                Returns the <code>ChatCompletionApiRequest</code> object that was used
+                to construct the request. In cases where functions have been executed, this
+                will return only the final request in the sequence.
+            </p>
+            <code-block lang="php">
+                // Get the request object used to make the request
+                $request = $response->getApiRequest();
 
+                // As an array
+                $request = $request->toArray();
+            </code-block>
+        </chapter>
+        <chapter id="chat-response-getapiresponse" title="getApiResponse()">
+            <p>
+                Returns the last response received from OpenAI, this will either be
+                a <code>ChatCompletionApiResponse</code> or a <code>ChatCompletionChunkApiResponse</code>
+                object.
+            </p>
+            <p>
+                Both of these objects are identical except one represents a standard final response and
+                the other a partial streamed response.
+            </p>
+            <code-block lang="php">
+                // Get the last response received from the API for this request
+                $lastApiResponse = $response->getApiResponse();
+
+                // As an array
+                $lastApiResponse = $lastApiResponse->toArray();
+            </code-block>
+        </chapter>
+        <chapter id="chat-response-getapiresponses" title="getApiResponses()">
+            <p>
+                Returns an array of the OpenAI responses received during the processing of
+                this request.
+            </p>
+            <p>
+                The returned objects will either be <code>ChatCompletionApiResponse</code> or <code>ChatCompletionChunkApiResponse</code>
+                objects.
+            </p>
+            <code-block lang="php">
+                // Get all responses
+                $allApiResponses = $response->getApiResponses();
+            </code-block>
+        </chapter>
+        <chapter id="chat-response-getcurrentmessage" title="getCurrentMessage()">
+            <p>
+                Returns a <code>Message</code> object that can represents the most recent
+                response from GPT.
+            </p>
+            <p>
+                If you were building a chatbot, this is the message you would display to
+                the user.
+            </p>
+            <p>
+                The returned objects will either be <code>ChatCompletionApiResponse</code> or <code>ChatCompletionChunkApiResponse</code>
+                objects.
+            </p>
+            <code-block lang="php">
+                // Get the current message
+                $message = $response->getCurrentMessage();
+
+                // Get the content
+                $content = $message->content;
+            </code-block>
+        </chapter>
+        <chapter id="chat-response-getmessagehistory" title="getMessageHistory()">
+            <p>
+                Returns an array <code>Message</code> objects that represent the conversation
+                to date.
+            </p>
+            <p>
+                For simple requests this will contain two or three message. A user message that
+                was the request, a system message if one was set and the GPT response message.
+            </p>
+            <p>
+                In the case of chatbots, this would contain the entire chat history if the chat
+                request was constructed with history.
+            </p>
+            <p>
+                If function calling was used, you will also see the message between GPT and PHP-GPT
+                to resolve the calls.  The <code>tool_calls</code> property on the message will be
+                set for a function request, and the <code>tool_call_id</code> property will be
+                set for a function call response.
+            </p>
+            <code-block lang="php">
+                // Get the message history
+                $messages = $response->getMessageHistory();
+
+                // Filter out function calls
+                $messages = array_filter(
+                    $messages,
+                    fn (Message $message) =>
+                        !is_null($message->tool_calls)
+                        || !is_null($message->tool_call_id)
+                );
+            </code-block>
+        </chapter>
     </chapter>
+    <seealso>
+        <category ref="guides">
+            <a href="Function-calling.topic"/>
+        </category>
+        <category ref="services">
+            <a href="Assistant-service.topic"/>
+            <a href="Audio-services.topic"/>
+            <a href="Chat-services.topic"/>
+            <a href="File-services.topic"/>
+            <a href="Image-services.topic"/>
+        </category>
+    </seealso>
 </topic>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Assistant services" id="Assistant-service">
+    <card-summary>Build complex reusable assistants.</card-summary>
+    <section-starting-page>
+        <title>Assistant services</title>
+        <description>
+            Used to build and execute assistants.
+        </description>
+        <spotlight>
+            <a href="Assistants-guide.topic" type="academy" />
+        </spotlight>
+        <primary>
+            <a href="Assistants.topic" />
+            <a href="Threads.topic"/>
+            <a href="Messages.topic"/>
+            <a href="Runs.topic"/>
+        </primary>
+    </section-starting-page>
+</topic>

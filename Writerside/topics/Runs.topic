@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Runs" id="Runs">
+    <card-summary>Execute a thread against an assistant.</card-summary>
+    <section-starting-page>
+        <title>Runs</title>
+        <description>
+            Represents the execution of a thread against an assistant.
+        </description>
+        <primary>
+            <a href="createRun.topic">Create run</a>
+            <a href="cancelRun.topic">Cancel run</a>
+            <a href="listRuns.topic">List runs</a>
+            <a href="listRunSteps.topic">List run steps</a>
+            <a href="retrieveRun.topic">Retrieve run</a>
+            <a href="retrieveRunStep.topic">Retrieve run steps</a>
+            <a href="modifyRun.topic">Modify run</a>
+        </primary>
+        <secondary>
+            <a href="submitToolOutputsToRun.topic">Submit tool outputs</a>
+        </secondary>
+    </section-starting-page>
+</topic>

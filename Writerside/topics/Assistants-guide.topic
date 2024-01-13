@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Assistants guide" id="Assistants-guide">
+    <card-summary>Comprehensive guide to working with assistants.</card-summary>
+    <p>
+        Assistants are a beta feature of the OpenAI api which allows for the creation
+        of assistants that can be tasked to do specific things.
+    </p>
+    <p>
+        Assistants are a little more complex to use because there are multiple steps
+        required to create and then use.
+    </p>
+    <p>
+        Once created an assistant can be reused over and over, this allows us to do things
+        such as create a math tutor and maintain independent threads for each user.
+    </p>
+    <p>
+        Threads are created independently to the assistant and represent a conversation between
+        a user (or application) and one or more assistants.
+    </p>
+    <p>
+        The thread will contain all the messages in the conversation which are retained
+        over time by the OpenAI api.
+    </p>
+    <p>
+        Once an assistant has been created, we need to create a thread with our message to the
+        assistant.
+    </p>
+    <p>
+        Once we've created the thread, we need to create a run to execute the thread against
+        the assistant, which will result in the assistant attaching a new message to the
+        thread.
+    </p>
+    <p>
+        Here is a quick example of creating and using an assistant that translates all messages it
+        receives into Spanish.
+    </p>
+    <code-block lang="php">
+        // Create the assistant
+        $assistantId = (string) AI::createAssistant('Spanish translator')
+            ->description('Translates messages into Spanish')
+            ->instructions('Translate all user messages into Spanish.');
+
+        // Create a thread with a new message that will be translated
+        $threadId = (string) AI::createThread('Hello!');
+
+        // Execute the thread against the assistant
+        $translation = (string) AI::createRun($assistantId, $threadId);
+    </code-block>
+    <p>
+        If we were creating a chat service, we can add a new message to the
+        thread at a later time to continue the conversation.
+    </p>
+    <code-block lang="php">
+        // Add a new message
+        $messageId = (string) AI::createMessage($threadId)
+            ->content('How are you?');
+
+        // Execute the thread to obtain the next response
+        $nextResponse = (string) AI::createRun($assistantId, $threadId);
+    </code-block>
+    <p>
+        Threads and assistants are retained within OpenAI until you specifically delete them.
+    </p>
+    <code-block lang="php">
+        $response = AI::deleteThread($threadId)->execute();
+        $response = AI::deleteAssistant($assistant)->execute();
+    </code-block>
+    <chapter id="assistants-guide-tools" title="Tools">
+        <p>
+            Tools are a powerful feature of assistants, we can use tools to analyse documents,
+            to execute code and to execute local PHP functions.
+        </p>
+        <p>
+            Using tools we can empower an assistant to do almost anything we like, for example
+            you could create a function that allows the assistant to retrieve and analyse
+            content directly from the internet.
+        </p>
+        <chapter id="assistants-guide-tools-retrieval" title="Retrieval tool">
+            <p>
+                The retrieval tool allows the assistant to read and obtain information from
+                documents.
+            </p>
+            <p>
+                We need to enable retrieval on the assistant before we are able to use it.
+            </p>
+            <code-block lang="php">
+                $assistantId = (string) AI::createAssistant('Document analyser')
+                    ->description('Analyses documents.')
+                    ->instructions('You answer questions about any files available.')
+                    ->useRetrieval();
+            </code-block>
+            <p>
+                We can attach files in one of two ways, either to the assistant or to
+                the current message in the thread.
+            </p>
+            <p>
+                Additionally, there are two ways to attach files themselves, you can use
+                a file ID from a previously uploaded file, or you can provide a local path
+                to a file which will be uploaded automatically for you.
+            </p>
+            <code-block lang="php">
+                // Attach files to the assistant
+                $assistantId = (string) AI::createAssistant('Document analyser')
+                    ->description('Analyses documents.')
+                    ->instructions('You answer questions about any files available.')
+                    ->useRetrieval()
+                    ->useFile('/local/path/doc.pdf')
+                    ->useFileId('some-file-id');
+
+                // Attach files to the message
+                $messageId = (string) AI::createMessage($threadId)
+                    ->content('Search the documents for so and so')
+                    ->useFile('/local/path/doc.pdf')
+                    ->useFileId('some-file-id');
+            </code-block>
+        </chapter>
+
+    </chapter>
+</topic>

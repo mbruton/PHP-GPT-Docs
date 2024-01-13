@@ -4,13 +4,13 @@
 <topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Function calling" id="Function-calling">
-
+    <card-summary>Deeply integrate your application by fusing GPT with PHP.</card-summary>
     <p>
         Function calling is supported by both the chat and assistants services and allow
         us to connect PHP function directly to GPT.
     </p>
     <p>
-        The builder objects for <code>createAssistant()</code> and <code>chat()</code>
+        The builder objects for <code>createRun()</code> and <code>chat()</code>
         both offer the method <code>useFunction()</code> which can be used to attach
         a PHP function to GPT.
     </p>
@@ -22,7 +22,7 @@
 
         // Or
 
-        $builder = AI::createAssistant();
+        $builder = AI::createRun();
     </code-block>
     <p>
         The <code>useFunction()</code> method expects a closure which is passed a <code>FunctionBuilder</code>

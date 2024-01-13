@@ -110,4 +110,8 @@
         <description>Created after removal of "Getting started" from PHP-GPT</description>
         <accepts>Getting-started.html</accepts>
     </rule>
+    <rule id="71e4406e">
+        <description>Created after removal of "Assitants" from PHP-GPT</description>
+        <accepts>Assitants.html</accepts>
+    </rule>
 </rules>

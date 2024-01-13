@@ -16,10 +16,7 @@
         echo AI::chat('Tell me a joke');
     </code-block>
     <p>
-        Offering a wide range of services.
-    </p>
-    <p>
-        Such as text to speech.
+        Offering a wide range of services, such as text to speech.
     </p>
     <code-block lang="php">
         $mp3FilePath = (string) AI::createSpeech('Hello, how are you?');
@@ -31,7 +28,7 @@
         $imageUrl = (string) AI::createImage('A cute picture of a fox');
     </code-block>
     <p>
-        Packed with features such as image and document analyse, streaming, assistant creation
+        Packed with features such as image and document analysis, streaming, assistant creation
         and management.
     </p>
     <p>

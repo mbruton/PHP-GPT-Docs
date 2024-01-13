@@ -4,6 +4,30 @@
 <topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Documenation" id="Documenation">
-
-    <p>Start typing here...</p>
+    <card-summary>PHP-GPT documentation.</card-summary>
+    <section-starting-page>
+        <title>Documentation</title>
+        <description>Everything great that has ever happened, started somewhere.</description>
+        <spotlight>
+            <a href="AI.topic" type="start">
+                The <code>AI</code> class
+            </a>
+            <a href="Pipeline.topic" type="check-list">
+                The <code>Pipeline</code> class
+            </a>
+        </spotlight>
+        <primary>
+            <title>Guides</title>
+            <a href="Assistants-guide.topic">Assistants guide</a>
+            <a href="Function-calling.topic">Function calling</a>
+        </primary>
+        <secondary>
+            <title>Services</title>
+            <a href="Assistant-service.topic">Assistants</a>
+            <a href="Audio-services.topic">Audio</a>
+            <a href="Chat-services.topic">Chat</a>
+            <a href="File-services.topic">Files</a>
+            <a href="Image-services.topic">Images</a>
+        </secondary>
+    </section-starting-page>
 </topic>

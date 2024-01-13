@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Services" id="Services">
+    <card-summary>AI services categorised.</card-summary>
+    <section-starting-page>
+        <title>Services</title>
+        <description>Categorised AI services.</description>
+        <primary>
+            <a href="Assistant-service.topic">Assistants</a>
+            <a href="Audio-services.topic">Audio</a>
+            <a href="Chat-services.topic">Chat</a>
+            <a href="File-services.topic">Files</a>
+            <a href="Image-services.topic">Images</a>
+        </primary>
+    </section-starting-page>
+</topic>

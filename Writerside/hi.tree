@@ -44,9 +44,23 @@
             <toc-element topic="uploadFile.topic"/>
             <toc-element topic="varyImage.topic"/>
         </toc-element>
+        <toc-element topic="Pipeline.topic"/>
+        <toc-element topic="Prompt.topic"/>
+        <toc-element topic="Services.topic">
+            <toc-element topic="Assistant-service.topic">
+                <toc-element topic="Assistants.topic"/>
+                <toc-element topic="Messages.topic"/>
+                <toc-element topic="Runs.topic"/>
+                <toc-element topic="Threads.topic"/>
+            </toc-element>
+            <toc-element topic="Audio-services.topic"/>
+            <toc-element topic="Chat-services.topic"/>
+            <toc-element topic="File-services.topic"/>
+            <toc-element topic="Image-services.topic"/>
+        </toc-element>
     </toc-element>
     <toc-element topic="Guides.topic">
-        <toc-element topic="Assistants.topic"/>
+        <toc-element topic="Assistants-guide.topic"/>
         <toc-element topic="Function-calling.topic"/>
     </toc-element>
 </instance-profile>

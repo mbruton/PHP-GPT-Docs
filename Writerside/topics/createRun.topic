@@ -5,5 +5,263 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="createRun()" id="createRun">
 
-    <p>Start typing here...</p>
+    <p>Creates a run which represents the execution of a thread against an assistant.</p>
+    <chapter id="createRun-basic" title="Basic usage">
+        <p>
+            When creating a run you need to specify the assistant ID for the assistant
+            you wish to use as well as the thread ID.
+        </p>
+        <code-block lang="php">
+            $builder = AI::createRun('assistant-id', 'thread-id');
+        </code-block>
+        <p>
+            Both arguments are optional at point of creation and can be supplied via
+            the builder later.  Both are required to execute the builder.
+        </p>
+    </chapter>
+    <chapter id="createRun-builder" title="Builder">
+        <p>
+            Used to construct the run.
+        </p>
+        <code-block lang="php">
+            $builder = AI::createRun();
+        </code-block>
+        <chapter id="createRun-builder-thread" title="thread()">
+            <p>
+                Used to specify the thread ID to run.
+            </p>
+            <code-block lang="php">
+                $builder = AI::createRun()
+                    ->thread('put-your-thread-id-here');
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-assistant" title="assistant()">
+            <p>
+                Used to specify the assistant ID what will be used to run the thread.
+            </p>
+            <code-block lang="php">
+                $builder = AI::createRun()
+                    ->assistant('put-your-assistant-id-here');
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-model" title="model()">
+            <p>
+                The model is provided by this assistant, when supplied, the assistants will
+                use this model instead.
+            </p>
+            <code-block lang="php">
+                // Override the assistants model
+                $builder = AI::createRun()
+                    ->model('gpt-4-1106-preview');
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-instructions" title="instructions()">
+            <p>
+                Optionally override the assistants instructions with instructions
+                specific to this run.
+            </p>
+            <code-block lang="php">
+                // Override the assistants instructions for this run
+                $builder = AI::createRun()
+                    ->instructions('Write a joke about why the chicken crossed the road.');
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-additionalInstructions" title="additionalInstructions()">
+            <p>
+                Optionally you can provide additional instructions to the assistant for
+                this run.
+            </p>
+            <code-block lang="php">
+                // Change the output to Spanish
+                $builder = AI::createRun()
+                    ->additionalInstructions('Output only in Spanish.');
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-useCodeInterpreter" title="useCodeInterpreter()">
+            <p>
+                Optionally you can override the assistants setting for using the code
+                interpreter.
+            </p>
+            <code-block lang="php">
+                // Enable the interpreter for this run
+                $builder = AI::createRun()
+                    ->useCodeInterpreter();
+
+                // Disable the interpreter for this run
+                $builder = AI::createRun()
+                    ->useCodeInterpreter(false);
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-useRetrieval" title="useRetrieval()">
+            <p>
+                Overrides the assistants setting for retrieval.
+            </p>
+            <p>
+                When enabled the assistant is able to retrieve information from any files
+                attached to the assistant, or to the message in the thread.
+            </p>
+            <code-block lang="php">
+                // Enable retrieval for this run
+                $builder = AI::createRun()
+                    ->useRetrieval();
+
+                // Disable retrieval for this run
+                $builder = AI::createRun()
+                    ->useRetrieval(false);
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-useFunction" title="useFunction()">
+            <note title="Really important information">
+                <p>
+                    Due to the way this library is constructed, you should not attach
+                    functions to assistants, instead you should attach them to the run.
+                </p>
+                <p>
+                    If you attach them to the assistant, the run will not have access to
+                    the PHP function unless it is also attached to the run.
+                </p>
+                <p>
+                    If you are attaching them to the run as well, then you are also overriding
+                    the functions on the assistant, which essentially means attaching them
+                    to the assistant itself it a pointless exercise.
+                </p>
+            </note>
+            <p>
+                Attaches PHP functions to the run that the assistant can use to execute
+                the run.
+            </p>
+            <p>
+                This is an exceptionally powerful feature, we can use this feature to
+                empower GPT to do anything.
+            </p>
+            <p>
+                Please be sure to read the <a href="Function-calling.topic"/> guide for
+                detailed information on how to use this feature.
+            </p>
+            <code-block lang="php">
+                // Allow GPT to know the current time.
+                $builder = AI::createRun()
+                    ->useFunction(
+                        function (FunctionBuilder $fnBuilder) {
+                            $fnBuilder->name('getTime')
+                                ->description('Returns the current time.')
+                                ->function(fn () => date('H:i:s'));
+                        }
+                    )
+                );
+            </code-block>
+        </chapter>
+        <chapter id="createRun-builder-metadata" title="metadata()">
+            <p>
+                Used to attach addition information to the run for future reference.
+            </p>
+            <code-block lang="php">
+                $metadata = [
+                    'internal-id' => '1234abcd',
+                    'user' => 'matt',
+                ];
+
+                $builder = AI::createRun()
+                    ->metadata($metadata);
+            </code-block>
+        </chapter>
+    </chapter>
+    <chapter id="createRun-response" title="Response">
+        <p>
+            The response returned by the run.
+        </p>
+        <p>
+            Internally PHP-GPT awaits the completion of the run, and then requests
+            the last 20 messages from the thread and includes them in the response.
+        </p>
+        <p>
+            This means the response you obtain from the create run call is the final response
+            once everything has been processed, including tool calls such as function
+            execution.
+        </p>
+        <code-block lang="php">
+            // Get the response
+            $response = $builder->execute();
+        </code-block>
+        <p>
+            When cast as a string the response will return the contents of the last
+            message received, the response you are most likely looking for.
+        </p>
+        <chapter id="createRun-response-getLatestMessages" title="getLatestMessages()">
+            <p>
+                Returns a collection of the last 20 messages in the thread.
+            </p>
+            <code-block lang="php">
+                // Get the messages
+                $messages = $response->getLatestMessages();
+
+                // Get the most recent message
+                $message = $messages->last();
+
+                // Get the message content
+                $content = $message->content;
+            </code-block>
+        </chapter>
+        <chapter id="createRun-response-getRun" title="getRun()">
+            <p>
+                Returns the run object.
+            </p>
+            <code-block lang="php">
+                // Get the run
+                $run = $response->getRun();
+
+                // Get the run ID
+                $id = $run->id;
+
+                // Get the status
+                $status = $run->status;
+
+                // Get the last error
+                $error = $run->last_error;
+            </code-block>
+        </chapter>
+        <chapter id="createRun-response-getApiResponse" title="getApiResponse()">
+            <p>
+                Returns the underlying response object used by PHP-GPT
+                <code>CreateRunApiResponse</code> which is essentially the
+                same as the <code>getRun()</code> method.
+            </p>
+            <p>
+                The returned object is a direct representation of the OpenAI api response
+                and you can convert it to an array if you wish.
+            </p>
+            <code-block lang="php">
+                // Get raw response data
+                $rawResponse = $response->getApiResponse->toArray();
+            </code-block>
+        </chapter>
+    </chapter>
+    <seealso>
+        <category ref="guides">
+            <a href="Assistants-guide.topic"/>
+            <a href="Function-calling.topic"/>
+        </category>
+        <category ref="services">
+            <a href="Assistant-service.topic"/>
+            <a href="Audio-services.topic"/>
+            <a href="Chat-services.topic"/>
+            <a href="File-services.topic"/>
+            <a href="Image-services.topic"/>
+        </category>
+        <category ref="service-assistants">
+            <a href="Assistants.topic">Assistants</a>
+            <a href="Messages.topic">Messages</a>
+            <a href="Runs.topic">Runs</a>
+            <a href="Threads.topic">Threads</a>
+        </category>
+        <category ref="service-assistants-runs">
+<!--            <a href="createRun.topic">Create run</a>-->
+            <a href="cancelRun.topic">Cancel run</a>
+            <a href="listRuns.topic">List runs</a>
+            <a href="listRunSteps.topic">List run steps</a>
+            <a href="retrieveRun.topic">Retrieve run</a>
+            <a href="retrieveRunStep.topic">Retrieve run steps</a>
+            <a href="modifyRun.topic">Modify run</a>
+        </category>
+    </seealso>
 </topic>
