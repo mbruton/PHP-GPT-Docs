@@ -4,7 +4,6 @@
 <topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Documenation" id="Documenation">
-    <card-summary>PHP-GPT documentation.</card-summary>
     <section-starting-page>
         <title>Documentation</title>
         <description>Everything great that has ever happened, started somewhere.</description>

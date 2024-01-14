@@ -117,7 +117,130 @@
                     ->useFile('/local/path/doc.pdf')
                     ->useFileId('some-file-id');
             </code-block>
-        </chapter>
+            <p>
+                Once a file has been uploaded to OpenAI it can be used elsewhere by using
+                the file ID.
+            </p>
+            <p>
+                Because of this the response for the create assistant call will contain
+                the file ID for any files that were uploaded during the request.
+            </p>
+            <p>
+                Basically any file that was specified using the <code>useFile()</code> method.
+            </p>
+            <p>
+                Using the method <code>getUploadedFiles()</code> will return an array of file
+                ID's with the key being the local file path.
+            </p>
+            <p>
+                Or using the method <code>getUploadedFile($path)</code> we can specify the local
+                path to obtain the file ID.
+            </p>
+            <code-block lang="php">
+                // Attach files to the assistant
+                $response = AI::createAssistant('Document analyser')
+                    ->description('Analyses documents.')
+                    ->instructions('You answer questions about any files available.')
+                    ->useRetrieval()
+                    ->useFile('/local/path/doc.pdf')
+                    ->useFileId('some-file-id')
+                    ->execute();
 
+                // Get the file ID's
+                $files = $response->getUploadedFiles();
+
+                // Attach files to the message
+                $response = AI::createMessage($threadId)
+                    ->content('Search the documents for so and so')
+                    ->useFile('/local/path/doc.pdf')
+                    ->useFileId('some-file-id')
+                    ->execute();
+
+                // Get a file ID
+                $fileId = $response->getUploadedFile('/local/path/doc.pdf');
+            </code-block>
+        </chapter>
+        <chapter id="assistants-guide-tools-code-interpreter" title="Code interpreter">
+            <p>
+                The code interpreter tool allows the assistant to execute code in order
+                to respond to requests.
+            </p>
+            <p>
+                The code generated is Python, and it is executed in a sandbox environment
+                within OpenAI's platform.
+            </p>
+            <p>
+                When enabled the assistant is able to use the sandbox to write and execute
+                code in order to response to requests.
+            </p>
+            <p>
+                For example, asking a complex mathematical question might result in the
+                assistant writing code to solve the problem.
+            </p>
+            <p>
+                When enabled the code interpreter can also access any files available to
+                the assistant allowing for complex data retrieval and manipulation.
+            </p>
+            <p>
+                To enable the code interpreter we simply need to enable it on the assistant.
+            </p>
+            <code-block lang="php">
+                // Create an assistant that can write and execute code
+                $assistantId = (string) AI::createAssistant('Problem solve')
+                    ->description('Solves complex problems.')
+                    ->instructions('You solve problems by writing and executing code.')
+                    ->useCodeInterpreter();
+            </code-block>
+        </chapter>
+        <chapter id="assistants-guide-tools-function-calling" title="Function calling">
+            <p>
+                Function calling allows us to define local PHP functions that can be
+                executed via the assistant to enable it to perform actions within
+                your application.
+            </p>
+            <p>
+                This creates limitless possibilities, we can for example create a function
+                that accepts a URL as a parameter and returns the content of the webpage,
+                effectively giving the assistant internet access.
+            </p>
+            <warning title="Important information">
+                <p>
+                    OpenAI allows functions to be attached to the assistant or to the run.
+                </p>
+                <p>
+                    PHP-GPT technically supports both, however, in practice this only works
+                    if it is attached to the run.
+                </p>
+                <p>
+                    If you want to use function calling, please attach it only to the run.
+                </p>
+            </warning>
+            <p>
+                Read <a href="Function-calling.topic"/> for an in depth guide to this feature.
+            </p>
+            <p>
+                In this simple example we will create a function that will allow the assistant
+                to access the current date.
+            </p>
+            <code-block lang="php">
+                // Get the create run builder
+                $builder = AI::createRun($assistantId, $threadId);
+
+                // Create a function to obtain the date
+                $builder->useFunction(function (FunctionBuilder $functionBuilder) {
+                    // Define the function
+                    $functionBuilder->name('getDate')
+                        ->description('Returns the current date.');
+
+                    // Create the function
+                    $functionBuilder->function(
+                        fn() => date('Y-m-d)
+                    );
+                });
+
+                // Execute the run
+                $response = $builder->execute();
+            </code-block>
+        </chapter>
     </chapter>
 </topic>
