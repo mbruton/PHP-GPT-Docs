@@ -5,5 +5,109 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="Pipeline" id="Pipeline">
 
-    <p>Create complex pipelines that can used to create complex AI calls.</p>
+    <card-summary>Create complex pipelines that can used to create complex AI calls.</card-summary>
+    <code-block lang="php">
+        use PhpGpt\Pipeline\Pipeline;
+    </code-block>
+    <p>
+        Pipelines allow us to construct complex AI calls that have multiple steps.
+    </p>
+    <p>
+        Pipelines also offer us a mechanism handling rate limit issues in that may
+        occur in the middle of the pipeline.
+    </p>
+    <p>
+        Here is an example of a simple pipeline that will generate a story for a given
+        topic as an audiobook.
+    </p>
+    <code-block lang="php">
+        // Create a pipeline
+        $pipeline = Pipeline::create();
+
+        // Add a step to write the story
+        $pipeline->step(AI::chat('Write a story story about {{topic}}'))
+            ->named('story');
+
+        // Add a step to generate the audiobook
+        $pipeline->step(AI::createSpeech('{{story}}'))
+            ->named('mp3_filepath');
+    </code-block>
+    <p>
+        Once the pipeline is created we can execute it multiple times with different
+        topics.
+    </p>
+    <code-block lang="php">
+        $pipeline->bind('topic', 'Spaceships');
+        $response = $pipeline->execute();
+
+        // Print out the text of the story
+        echo $response->getOutput('story');
+
+        // Print out the location of the mp3 file
+        echo $response->getOutput('mp3_filepath');
+    </code-block>
+    <p>
+        A step can be an AI builder object, another pipeline or a function.
+    </p>
+    <p>
+        Functions are useful if you want to modify or clean up the output from one
+        step before the next.
+    </p>
+    <p>
+        Let's say we want a list of the colours of the rainbow as an array, we could do this.
+    </p>
+    <code-block lang="php">
+        $pipeline = Pipeline::create();
+        $pipeline->step(AI::chat('List the colours of the rainbow if a single colour name on each line.'))
+            ->named('colours');
+
+        $pipeline->step( fn (Pipeline $pipeline) => explode($pipeline->getBinding('colours')))
+            ->named('colours');
+    </code-block>
+    <p>
+        This is also useful if you want to do something at this point, such as make an
+        internal application call.
+    </p>
+    <p>
+        You'll notice that after the <code>step</code> method we are calling the <code>named()</code>
+        method, when we do this, the output from the step is included both as a binding from any future
+        steps, and also it's included in the response.
+    </p>
+    <chapter id="pipeline-if" title="Conditional steps">
+        <p>
+            Sometimes you may not always want to execute a step, you can define
+            conditional steps with the <code>if</code> method.
+        </p>
+        <code-block lang="php">
+            $pipeline->if(fn (Pipeline $pipeline) => true)
+                ->then(/* step */)
+                ->else(/* optional step */)
+                ->endif()
+                ->named('some-name');
+        </code-block>
+        <p>
+            The <code>if</code> method accepts a single argument which is a function.
+        </p>
+        <p>
+            The function will receive one argument which is the pipeline currently being
+            executed, this can be used to obtain values from any outputs via the
+            <code>getBinding()</code> method.
+        </p>
+        <p>
+            The method must return a boolean value.
+        </p>
+        <p>
+            The <code>then()</code> method defines the step that should be processed when
+            the "if function" returns true.
+        </p>
+        <p>
+            The <code>else()</code> method is optional and defines the step that should
+            be processed when the "if function" returns false.
+        </p>
+        <p>
+            <code>then()</code> and <code>else()</code> both accept an AI calls,
+            functions or another pipeline. Using another pipeline allows us to define
+            complex workflows.
+        </p>
+    </chapter>
 </topic>
