@@ -5,7 +5,142 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="listRunSteps()" id="listRunSteps">
 
-    <p>Start typing here...</p>
+    <p>
+        Lists the steps against a run. See the <a href="Assistants-guide.topic"/> for
+        more information.
+    </p>
+    <chapter id="listRunSteps-basic" title="Basic usage">
+        <p>
+            You can obtain the last 20 steps for the run without any configuration
+            with the following.
+        </p>
+        <code-block lang="php">
+            $response = AI::listRunSteps($threadId, $runId)->execute();
+
+            foreach ($response->getRunSteps() as $step) {
+                // ...
+            }
+        </code-block>
+    </chapter>
+    <chapter id="listRunSteps-builder" title="Builder">
+        <chapter id="listRunSteps-builder-thread" title="thread()">
+            <p>
+                Used to specify the thread to obtain the run steps for, required.
+            </p>
+            <code-block lang="php">
+                $builder = AI::listRunSteps($threadId, $runId);
+                // Or
+                $builder = AI::listRunSteps()
+                    ->thread($threadId);
+            </code-block>
+        </chapter>
+        <chapter id="listRunSteps-builder-run" title="run()">
+            <p>
+                Used to specify the run to obtain the run steps for, required.
+            </p>
+            <code-block lang="php">
+                $builder = AI::listRunSteps($threadId, $runId);
+                // Or
+                $builder = AI::listRunSteps()
+                    ->run($threadId);
+            </code-block>
+        </chapter>
+        <chapter id="listRunSteps-builder-limit" title="limit()">
+            <p>
+                Limits the number of items to be returned, defaults to 20. Must be between
+                1 and 100.
+            </p>
+            <code-block lang="php">
+                $builder = AI::listRunSteps($threadId, $runId)
+                    ->limit(100);
+            </code-block>
+        </chapter>
+        <chapter id="listRunSteps-builder-ascending" title="ascending()">
+            <p>
+                Can be used to sort the results by the creation date.
+            </p>
+            <code-block lang="php">
+                // Ascending
+                $builder = AI::listRunSteps($threadId, $runId)
+                    ->ascending();
+
+                // Descending
+                $builder = AI::listRunSteps($threadId, $runId)
+                    ->ascending(false);
+            </code-block>
+        </chapter>
+        <chapter id="listRunSteps-builder-after" title="after()">
+            <p>
+                Used to return results after the given ID.
+            </p>
+            <code-block lang="php">
+                $builder = AI::listRunSteps($threadId, $runId)
+                    ->after('some-id');
+            </code-block>
+        </chapter>
+        <chapter id="listRunSteps-builder-before" title="before()">
+            <p>
+                Used to return results before the given ID.
+            </p>
+            <code-block lang="php">
+                $builder = AI::listRunSteps($threadId, $runId)
+                    ->before('some-id');
+            </code-block>
+        </chapter>
+    </chapter>
+    <chapter id="listRunSteps-response" title="Response">
+        <p>
+            When the response is used as a string it returns the ID of the last item in
+            the list.  This can be useful for working with pagination as you can use this
+            ID with the <code>after()</code> or <code>before()</code> methods of
+            the builder to obtain the next set.
+        </p>
+        <code-block lang="php">
+            $totalPerPage = 50;
+            $builder = AI::listRunSteps($threadId, $runId)
+                ->limit($totalPerPage);
+
+            $response = $builder->execute();
+            while ($response->getRunStepCount() != $totalPerPage) {
+                // ...
+
+                // Get the next results
+                $response = $builder->after((string) $response)
+                    ->execute();
+            }
+        </code-block>
+        <chapter id="listRunSteps-response-getRunStepCount" title="getRunStepCount()">
+            <p>
+                Returns the number of items in the collection that have been returned.
+            </p>
+            <code-block lang="php">
+                $itemCount = $response->getRunStepCount();
+            </code-block>
+        </chapter>
+        <chapter id="listRunSteps-response-getRunSteps" title="getRunSteps()">
+            <p>
+                Returns a <code>RunCollection</code>.
+            </p>
+            <p>
+                The run collection can be converted to an array with the <code>toArray()</code>
+                method.
+            </p>
+            <p>
+                The collection contains a list of <code>RunStep</code> objects which has the same
+                properties as the OpenAI run specification.
+            </p>
+            <p>
+                You can also convert an individual run to an array with the <code>toArray()</code>
+                method.
+            </p>
+            <code-block lang="php">
+                foreach ($response->getRunSteps() as $step) {
+                    echo 'ID: ' . $step->id . PHP_EOL;
+                    echo 'Status: ' . $step->status . PHP_EOL;
+                }
+            </code-block>
+        </chapter>
+    </chapter>
 
     <seealso>
         <category ref="guides">
