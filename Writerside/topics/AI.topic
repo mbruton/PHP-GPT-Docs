@@ -210,4 +210,11 @@
             </p>
         </chapter>
     </chapter>
+
+    <seealso>
+        <category ref="classes">
+            <a href="Pipeline.topic"/>
+            <a href="Prompt.topic"/>
+        </category>
+    </seealso>
 </topic>

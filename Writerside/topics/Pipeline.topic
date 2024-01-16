@@ -13,7 +13,7 @@
         Pipelines allow us to construct complex AI calls that have multiple steps.
     </p>
     <p>
-        Pipelines also offer us a mechanism handling rate limit issues in that may
+        Pipelines also offer us a mechanism for handling rate limit issues in that may
         occur in the middle of the pipeline.
     </p>
     <p>
@@ -110,4 +110,73 @@
             complex workflows.
         </p>
     </chapter>
+    <chapter id="pipeline-rate-limits" title="Handling rate limit issues">
+        <warning title="Feeling sleepy">
+            <p>
+                This method uses the PHP <code>sleep()</code> method to backoff when a
+                rate limit is reached.
+            </p>
+        </warning>
+        <p>
+            Sleeping is not a great method for handling rate limits and so PHP-GPT does not
+            offer a rate limit handing for single requests.
+        </p>
+        <p>
+            Support is included for pipelines because having a complex pipeline fail at
+            the final step is not ideal.
+        </p>
+        <chapter id="pipeline-rate-limits-rateLimitRetryAttempts" title="rateLimitRetryAttempts()">
+            <p>
+                To enable rate limit handling use <code>rateLimitRetryAttempts()</code> to
+                set the number of attempts each step can make before failing.
+            </p>
+            <code-block lang="php">
+                // Try each step 3 times
+                $pipeline = Pipeline::create()
+                    ->rateLimitRetryAttempts(3);
+            </code-block>
+            <p>
+                If the number of attempts are exceed before the requests completes successfully,
+                the pipeline will re-throw the rate limit exception for your application to handle.
+            </p>
+        </chapter>
+        <chapter id="pipeline-rate-limits-rateLimitRetryDelay" title="rateLimitRetryDelay()">
+            <p>
+                By default, PHP-GPT will wait for <code>5</code> seconds between each attempt.
+            </p>
+            <p>
+                You can change this with the <code>rateLimitRetryDelay()</code> method.
+            </p>
+            <code-block lang="php">
+                // Try each step 3 times and wait 3 seconds between tries
+                $pipeline = Pipeline::create()
+                    ->rateLimitRetryAttempts(3)
+                    ->rateLimitRetryDelay(3);
+            </code-block>
+        </chapter>
+        <chapter id="pipeline-rate-limits-rateLimitRetryMultiplier" title="rateLimitRetryMultiplier()">
+            <p>
+                To support exponential backoff, PHP-GPT multiples the delay by a factor of <code>2</code>
+                between attempts.
+            </p>
+            <p>
+                You can change this with the <code>rateLimitRetryMultiplier()</code> method.
+            </p>
+            <code-block lang="php">
+                // Try each step 3 times and wait 3 seconds between tries
+                //  and multiple the delay by 1.5 between attempts
+                $pipeline = Pipeline::create()
+                    ->rateLimitRetryAttempts(3)
+                    ->rateLimitRetryDelay(3)
+                    ->rateLimitRetryMultiplier(1.5);
+            </code-block>
+        </chapter>
+    </chapter>
+
+    <seealso>
+        <category ref="classes">
+            <a href="AI.topic"/>
+            <a href="Prompt.topic"/>
+        </category>
+    </seealso>
 </topic>

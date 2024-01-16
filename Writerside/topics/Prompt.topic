@@ -6,4 +6,51 @@
        title="Prompt" id="Prompt">
 
     <p>Manage prompts and prompt injections.</p>
+    <code-block lang="php">
+        use PhpGpt\Prompts\Prompt;
+    </code-block>
+    <p>
+        PHP-GPT uses the prompt class to represent prompts, you can however use it when
+        constructing prompts if you wish to store them in a file somewhere.
+    </p>
+    <p>
+        In its most basic form it is a string and can be used as a string.
+    </p>
+    <code-block lang="php">
+        $prompt = Prompt::fromString('Hello world');
+        echo $prompt; // It works as a string
+    </code-block>
+    <p>
+        It's helpful for binding values to prompts.
+    </p>
+    <code-block lang="php">
+        $prompt = Prompt::fromString('Hello {{what}}');
+        $prompt->bind('what', 'world');
+        echo $prompt; // Prints 'Hello world'
+    </code-block>
+    <p>
+        However, in most cases it is automatically used to represent prompts.
+    </p>
+    <code-block lang="php">
+        $builder = AI::chat('Hello {{what}}')
+            ->bind('what', 'world');
+    </code-block>
+    <p>
+        This works because the chat builder automatically wraps your prompt with the prompt
+        class.
+    </p>
+    <p>
+        If you are using files to store large prompts, you can use the prompt class
+        to load them.
+    </p>
+    <code-block lang="php">
+        $builder = AI::chat(Prompt::fromFile('/file/path/here.txt'));
+    </code-block>
+
+    <seealso>
+        <category ref="classes">
+            <a href="AI.topic"/>
+            <a href="Pipeline.topic"/>
+        </category>
+    </seealso>
 </topic>

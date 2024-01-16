@@ -2,7 +2,8 @@
 <!DOCTYPE categories
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/categories.dtd">
 <categories>
-    <category id="wrs" name="Writerside documentation" order="1"/>
+<!--    <category id="wrs" name="Writerside documentation" order="1"/>-->
+    <category id="classes" name="Classes" order="1" />
     <category id="guides" name="Guides" order="2"/>
     <category id="services" name="Services" order="3"/>
     <category id="service-assistants" name="Assistant service" order="10"/>

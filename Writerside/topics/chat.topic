@@ -144,7 +144,7 @@
                     ->image('http://www.example.com/image.png');
             </code-block>
             <p>
-                Images require more token, so be sure to increase the number of tokens than
+                Images require more tokens, so be sure to increase the number of tokens than
                 can be used.
             </p>
             <code-block lang="php">
@@ -189,7 +189,7 @@
                     ->image('http://www.example.com/image.png');
             </code-block>
             <p>
-                Images require more token, so be sure to increase the number of tokens than
+                Images require more tokens, so be sure to increase the number of tokens than
                 can be used.
             </p>
             <code-block lang="php">
@@ -393,10 +393,6 @@
             <p>
                 If you were building a chatbot, this is the message you would display to
                 the user.
-            </p>
-            <p>
-                The returned objects will either be <code>ChatCompletionApiResponse</code> or <code>ChatCompletionChunkApiResponse</code>
-                objects.
             </p>
             <code-block lang="php">
                 // Get the current message
