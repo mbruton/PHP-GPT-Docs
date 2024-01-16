@@ -5,7 +5,61 @@
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        title="retrieveRun()" id="retrieveRun">
 
-    <p>Start typing here...</p>
+    <p>
+        Used to retrieve a run, useful for determining the status of the run.
+    </p>
+    <p>
+        See the <a href="Assistants-guide.topic"/> for more information.
+    </p>
+    <chapter id="retrieveRun-basic" title="Basic usage">
+        <code-block lang="php">
+            // Get the run status
+            $status = (string) AI::retrieveRun($threadId, $runId);
+        </code-block>
+    </chapter>
+    <chapter id="retrieveRun-builder" title="Builder">
+        <p>
+            The builder object has to methods <code>thread()</code> and <code>run()</code>.
+        </p>
+        <p>
+            Both of which can be specified at the point of construction.
+        </p>
+        <code-block lang="php">
+            $builder = AI::retrieveRun($threadId, $runId);
+            // Or
+            $builder = AI::retrieveRun()
+                ->thread($threadId)
+                ->run($runId);
+        </code-block>
+    </chapter>
+    <chapter id="retrieveRun-response" title="Response">
+        <p>
+            The response when used as a string will return the status of the run.
+        </p>
+        <code-block lang="php">
+            $builder = AI::retrieveRun($threadId, $runId);
+            $response = $builder->execute();
+            $status = (string) $response
+        </code-block>
+        <chapter id="retrieveRun-response-getRun" title="getRun">
+            <p>
+                Returns the run object which has the same properties as the OpenAI
+                run object.
+            </p>
+            <code-block lang="php">
+                $builder = AI::retrieveRun($threadId, $runId);
+                $response = $builder->execute();
+                $run = $response->getRun();
+
+                $id = $run->id;
+                $status = $run->status;
+                // ...
+
+                // Or as an array
+                $data = $run->toArray();
+            </code-block>
+        </chapter>
+    </chapter>
 
     <seealso>
         <category ref="guides">
@@ -29,7 +83,7 @@
             <a href="cancelRun.topic">Cancel run</a>
             <a href="listRuns.topic">List runs</a>
             <a href="listRunSteps.topic">List run steps</a>
-            <a href="retrieveRun.topic">Retrieve run</a>
+<!--            <a href="retrieveRun.topic">Retrieve run</a>-->
             <a href="retrieveRunStep.topic">Retrieve run steps</a>
             <a href="modifyRun.topic">Modify run</a>
         </category>
